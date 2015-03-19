@@ -1,34 +1,66 @@
 ﻿using ColossalFramework.UI;
 using ICities;
 using UnityEngine;
+using System.Collections.Generic;
 
 namespace DifficultyOptions
 {
-    class buttonSetter
+    public class zarineButton : UIButton
     {
-        public void configureButton(UIButton button, string Title)
+        public List<modSlider> _sliders = new List<modSlider>();
+
+        public void configure(string Title)
         {
             // Set the text to show on the button.
-            button.text = Title;
+            text = Title;
 
             // Set the button dimensions.
-            button.width = 100;
-            button.height = 30;
+            width = 100;
+            height = 30;
 
             // Style the button to look like a menu button.
-            button.normalBgSprite = "ButtonMenu";
-            button.disabledBgSprite = "ButtonMenuDisabled";
-            button.hoveredBgSprite = "ButtonMenuHovered";
-            button.focusedBgSprite = "ButtonMenuFocused";
-            button.pressedBgSprite = "ButtonMenuPressed";
-            button.textColor = new Color32(255, 255, 255, 255);
-            button.disabledTextColor = new Color32(7, 7, 7, 255);
-            button.hoveredTextColor = new Color32(7, 132, 255, 255);
-            button.focusedTextColor = new Color32(255, 255, 255, 255);
-            button.pressedTextColor = new Color32(30, 30, 44, 255);
+            normalBgSprite = "ButtonMenu";
+            disabledBgSprite = "ButtonMenuDisabled";
+            hoveredBgSprite = "ButtonMenuHovered";
+            focusedBgSprite = "ButtonMenuFocused";
+            pressedBgSprite = "ButtonMenuPressed";
+            textColor = new Color32(255, 255, 255, 255);
+            disabledTextColor = new Color32(7, 7, 7, 255);
+            hoveredTextColor = new Color32(7, 132, 255, 255);
+            focusedTextColor = new Color32(255, 255, 255, 255);
+            pressedTextColor = new Color32(30, 30, 44, 255);
 
             // Enable button sounds.
-            button.playAudioEvents = true;
+            playAudioEvents = true;
         }
+
+        public void add(modSlider slider)
+        {
+            _sliders.Add(slider);
+        }
+
+        public void hideSliders()
+        {
+            _sliders.ForEach(delegate(modSlider slider)
+            {
+                slider.hideAll();
+            });
+        }
+
+        public void showSliders()
+        {
+            _sliders.ForEach(delegate(modSlider slider)
+            {
+                slider.showAll();
+            });
+        }
+
+        public override void OnDestroy()
+        {
+            _sliders.Clear();
+            base.OnDestroy();
+        }
+
+
     }
 }

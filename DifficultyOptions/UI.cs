@@ -14,7 +14,7 @@ namespace DifficultyOptions
 
     public class LoadingExtension : LoadingExtensionBase
     {
-        public UIButton _button;
+        public zarineButton _button;
         public modPanel _panel;
 
         public override void OnLevelLoaded(LoadMode mode)
@@ -22,9 +22,8 @@ namespace DifficultyOptions
             DebugOutputPanel.AddMessage(ColossalFramework.Plugins.PluginManager.MessageType.Message, "Zarine Difficulty Options Mod - Loading start");
             // Add a new button to the view.
             var uiView = UIView.GetAView();
-            _button = (UIButton)uiView.AddUIComponent(typeof(UIButton));
-            buttonSetter buttonSetter = new buttonSetter();
-            buttonSetter.configureButton(_button, "Difficulty");
+            _button = (zarineButton)uiView.AddUIComponent(typeof(zarineButton));
+            _button.configure("Difficulty");
 
             _panel = (modPanel)uiView.AddUIComponent(typeof(modPanel));
             _panel.setPanel("Difficulty Settings");
@@ -46,8 +45,8 @@ namespace DifficultyOptions
 
         public override void OnLevelUnloading()
         {
-            Object.Destroy(_panel);
             Object.Destroy(_button);
+            Object.Destroy(_panel);
         }
     }
 }

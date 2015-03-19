@@ -11,7 +11,7 @@ namespace DifficultyOptions
         public UILabel _label;
         public VariableReference<int> _dataValue;
 
-        public void setSlider(modPanel panel, string Title, VariableReference<int> reference, int min, int max)
+        public void setSlider(modPanel panel, string Title, VariableReference<int> reference, int min, int max, zarineButton associatedButton)
         {
             _valueDisplayer = (UILabel)panel.AddUIComponent(typeof(UILabel));
             _label = (UILabel)panel.AddUIComponent(typeof(UILabel));
@@ -37,6 +37,22 @@ namespace DifficultyOptions
             _label.textColor = new Color32(255, 255, 255, 255);
             _label.padding = new RectOffset(5, 5, 5, 5);
             _label.text = Title;
+
+            associatedButton.add(this);
+        }
+
+        public void hideAll()
+        {
+            _valueDisplayer.Hide();
+            _label.Hide();
+            Hide();
+        }
+
+        public void showAll()
+        {
+            _valueDisplayer.Show();
+            _label.Show();
+            Show();
         }
 
         protected override void OnValueChanged()
@@ -49,6 +65,7 @@ namespace DifficultyOptions
         {
             UnityEngine.Object.Destroy(_valueDisplayer);
             UnityEngine.Object.Destroy(_label);
+            base.OnDestroy();
         }
     }
 }

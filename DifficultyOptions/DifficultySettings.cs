@@ -14,17 +14,26 @@ namespace DifficultyOptions
         public static VariableReference<int> _refundCostMod = new VariableReference<int>(75);
         public static VariableReference<int> _relocationCostMod = new VariableReference<int>(20);
 
-        public void setMaintenanceCost(VariableReference<int> reference) { _maintenanceCostMod = reference; }
+        public static VariableReference<int> _residentialPercentage = new VariableReference<int>(100);
+        public static VariableReference<int> _commercialPercentage = new VariableReference<int>(100);
+        public static VariableReference<int> _industrialPercentage = new VariableReference<int>(100);
+
+        public static VariableReference<int> _residentialFlat = new VariableReference<int>(0);
+        public static VariableReference<int> _commercialFlat = new VariableReference<int>(0);
+        public static VariableReference<int> _industrialFlat = new VariableReference<int>(0);
+
         public int getMaintenanceCost() { return _maintenanceCostMod.Value; }
-
-        public void setConstructionCost(VariableReference<int> reference) { _constructionCostMod = reference; }
         public int getConstructionCost() { return _constructionCostMod.Value; }
-
-        public void setRefundCost(VariableReference<int> reference) { _refundCostMod = reference; }
         public int getRefundCost() { return _refundCostMod.Value; }
-
-        public void setRelocationCost(VariableReference<int> reference) { _relocationCostMod = reference; }
         public int getRelocationCost() { return _relocationCostMod.Value; }
+
+        public int getResidentialPercentage() { return _residentialPercentage.Value; }
+        public int getCommercialPercentage() { return _commercialPercentage.Value; }
+        public int getIndustrialPercentage() { return _industrialPercentage.Value; }
+
+        public int getResidentialFlat() { return _residentialFlat.Value; }
+        public int getCommercialFlat() { return _commercialFlat.Value; }
+        public int getIndustrialFlat() { return _industrialFlat.Value; }
 
         public void setDefaultValues()
         {
@@ -32,18 +41,56 @@ namespace DifficultyOptions
             _constructionCostMod.Value = 100;
             _refundCostMod.Value = 75;
             _relocationCostMod.Value = 20;
+            setDefaultValuesV2();
+        }
+
+        public void setDefaultValuesV2()
+        {
+            _residentialPercentage.Value = 100;
+            _commercialPercentage.Value = 100;
+            _industrialPercentage.Value = 100;
+            _residentialFlat.Value = 0;
+            _commercialFlat.Value = 0;
+            _industrialFlat.Value = 0;
         }
 
         public byte[] serialize()
         {
-            IEnumerable<byte> serializeVersion = BitConverter.GetBytes(1);
+            IEnumerable<byte> serializeVersion = BitConverter.GetBytes(2);
             IEnumerable<byte> maintenanceCostData = BitConverter.GetBytes(_maintenanceCostMod.Value);
             IEnumerable<byte> constructionCostData = BitConverter.GetBytes(_constructionCostMod.Value);
             IEnumerable<byte> refundCostData = BitConverter.GetBytes(_refundCostMod.Value);
             IEnumerable<byte> relocationCostData = BitConverter.GetBytes(_relocationCostMod.Value);
 
-            IEnumerable<byte> serialized = serializeVersion.Concat(maintenanceCostData).Concat(constructionCostData).Concat(refundCostData).Concat(relocationCostData);
+            IEnumerable<byte> residentialPercentage = BitConverter.GetBytes(_residentialPercentage.Value);
+            IEnumerable<byte> commercialPercentage = BitConverter.GetBytes(_commercialPercentage.Value);
+            IEnumerable<byte> industrialPercentage = BitConverter.GetBytes(_industrialPercentage.Value);
+
+            IEnumerable<byte> residentialFlat = BitConverter.GetBytes(_residentialFlat.Value);
+            IEnumerable<byte> commercialFlat = BitConverter.GetBytes(_commercialFlat.Value);
+            IEnumerable<byte> industrialFlat = BitConverter.GetBytes(_industrialFlat.Value);
+
+            IEnumerable<byte> serialized = serializeVersion.Concat(maintenanceCostData).Concat(constructionCostData).Concat(refundCostData).Concat(relocationCostData).Concat(residentialPercentage).Concat(commercialPercentage)
+                .Concat(industrialPercentage).Concat(residentialFlat).Concat(commercialFlat).Concat(industrialFlat);
             return serialized.ToArray<byte>();
+        }
+
+        public void deserializeV1(byte[] data)
+        {
+            _maintenanceCostMod.Value = BitConverter.ToInt32(data, 4);
+            _constructionCostMod.Value = BitConverter.ToInt32(data, 8);
+            _refundCostMod.Value = BitConverter.ToInt32(data, 12);
+            _relocationCostMod.Value = BitConverter.ToInt32(data, 16);
+        }
+
+        public void deserializeV2(byte[] data)
+        {
+            _residentialPercentage.Value = BitConverter.ToInt32(data, 20);
+            _commercialPercentage.Value = BitConverter.ToInt32(data, 24);
+            _industrialPercentage.Value = BitConverter.ToInt32(data, 28);
+            _residentialFlat.Value = BitConverter.ToInt32(data, 32);
+            _commercialFlat.Value = BitConverter.ToInt32(data, 36);
+            _industrialFlat.Value = BitConverter.ToInt32(data, 40);
         }
 
         public void deserialize(byte[] data)
@@ -53,10 +100,14 @@ namespace DifficultyOptions
             {
                 case 1:
                     {
-                        _maintenanceCostMod.Value = BitConverter.ToInt32(data, 4);
-                        _constructionCostMod.Value = BitConverter.ToInt32(data, 8);
-                        _refundCostMod.Value = BitConverter.ToInt32(data, 12);
-                        _relocationCostMod.Value = BitConverter.ToInt32(data, 16);
+                        deserializeV1(data);
+                        setDefaultValuesV2();
+                        break;
+                    }
+                case 2:
+                    {
+                        deserializeV1(data);
+                        deserializeV2(data);
                         break;
                     }
                 default:
@@ -70,7 +121,6 @@ namespace DifficultyOptions
         public override void OnSaveData()
         {
             serializableDataManager.SaveData("ZarineDifficultyMod", serialize());
-            DebugOutputPanel.AddMessage(ColossalFramework.Plugins.PluginManager.MessageType.Message, "saving: " + _maintenanceCostMod.Value + " - " + _constructionCostMod.Value + " - " + _refundCostMod.Value + " - " + _relocationCostMod.Value);
         }
 
         public override void OnLoadData()
@@ -83,7 +133,6 @@ namespace DifficultyOptions
             }
 
             deserialize(data);
-            DebugOutputPanel.AddMessage(ColossalFramework.Plugins.PluginManager.MessageType.Message, "loading: " + _maintenanceCostMod.Value + " - " + _constructionCostMod.Value + " - " + _refundCostMod.Value + " - " + _relocationCostMod.Value);
         }
     }
 
