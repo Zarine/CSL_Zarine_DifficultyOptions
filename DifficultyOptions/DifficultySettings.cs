@@ -78,7 +78,7 @@ namespace DifficultyOptions
             byte[] data = serializableDataManager.LoadData("ZarineDifficultyMod");
             if (data == null) {
                 setDefaultValues();
-                DebugOutputPanel.AddMessage(ColossalFramework.Plugins.PluginManager.MessageType.Message, "no data found for Difficulty Mod setting to default values";
+                DebugOutputPanel.AddMessage(ColossalFramework.Plugins.PluginManager.MessageType.Message, "no data found for Difficulty Mod setting to default values");
                 return;
             }
 

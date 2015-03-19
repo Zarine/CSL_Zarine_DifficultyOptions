@@ -35,6 +35,7 @@ namespace DifficultyOptions
             var button = (UIButton)this.AddUIComponent(typeof(UIButton));
             buttonSetter.configureButton(button, "Prices");
             button.relativePosition = new Vector3(10f, 50f);
+            button.eventClick += toggleTab;
 
             /*var button2 = (UIButton)this.AddUIComponent(typeof(UIButton));
             buttonSetter.configureButton(button2, "Second Button");
@@ -80,6 +81,11 @@ namespace DifficultyOptions
                 this.Show();
             }
 
+        }
+
+        public void toggleTab(UIComponent component, UIMouseEventParameter eventParam)
+        {
+            DebugOutputPanel.AddMessage(ColossalFramework.Plugins.PluginManager.MessageType.Message, "Test toggle: " + component.name);
         }
 
         public override void OnDestroy()
