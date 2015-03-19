@@ -10,19 +10,19 @@ namespace DifficultyOptions{
     {
 
         public override int OnGetConstructionCost(int originalConstructionCost, Service service, SubService subService, Level level) {
-            return originalConstructionCost * DifficultyOptionsMod.DIFFICULTY_SETTINGS.getConstructionCost() / 100;
+            return originalConstructionCost * (DifficultyOptionsMod.DIFFICULTY_SETTINGS.getConstructionCost() / 100);
         }
 
         public override int OnGetMaintenanceCost(int originalMaintenanceCost, Service service, SubService subService, Level level) {
-            return originalMaintenanceCost * DifficultyOptionsMod.DIFFICULTY_SETTINGS.getMaintenanceCost() / 100;
+            return originalMaintenanceCost * (DifficultyOptionsMod.DIFFICULTY_SETTINGS.getMaintenanceCost() / 100);
         }
 
         public override int OnGetRelocationCost(int constructionCost, int relocationCost, Service service, SubService subService, Level level) {
-            return constructionCost * DifficultyOptionsMod.DIFFICULTY_SETTINGS.getRelocationCost() / 100;
+            return constructionCost * (DifficultyOptionsMod.DIFFICULTY_SETTINGS.getRelocationCost() / 100);
         }
 
         public override int OnGetRefundAmount(int constructionCost, int refundAmount, Service service, SubService subService, Level level) {
-            return constructionCost * DifficultyOptionsMod.DIFFICULTY_SETTINGS.getRefundCost() / 100;
+            return constructionCost * (DifficultyOptionsMod.DIFFICULTY_SETTINGS.getRefundCost() / 100);
         }
 
     }
