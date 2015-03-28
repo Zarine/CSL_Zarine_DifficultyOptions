@@ -29,6 +29,11 @@ namespace DifficultyOptions
             this.width = 200;
             // TODO: find how to see the slider filling
 
+            UISlicedSprite indicatorObject = (UISlicedSprite)this.AddUIComponent(typeof(UISlicedSprite));
+            this.fillIndicatorObject = (UIComponent)indicatorObject;
+            indicatorObject.spriteName = "SliderFill";
+            
+
             _valueDisplayer.position = this.position + new Vector3(210, 0, 0);
             _valueDisplayer.textColor = new Color32(255, 255, 255, 255);
             _valueDisplayer.padding = new RectOffset(5, 5, 5, 5);
@@ -59,6 +64,7 @@ namespace DifficultyOptions
         {
             this._valueDisplayer.text = this.value.ToString();
             _dataValue.Value = (int)this.value;
+            base.OnValueChanged();
         }
 
         public override void OnDestroy()
